@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/igar1991/swarm-search/compare/v1.2.0...v1.3.0) (2023-02-05)
+
+
+### Features
+
+* hello ([0379cfb](https://github.com/igar1991/swarm-search/commit/0379cfb21c70837cedfc1b659c30130130ce6a10))
+
 ## [1.2.0](https://github.com/igar1991/swarm-search/compare/v1.1.0...v1.2.0) (2023-02-05)
 
 
