@@ -22,7 +22,7 @@ This approach allows you:
 * Control the integrity of the database during the download
 * Store tens and hundreds of GB of databases in Swarm
 
-## ---Suggestions
+## --Suggestions
 
 Create SQLite DB for titles only using `src/indexer/README.md` instruction.
 
