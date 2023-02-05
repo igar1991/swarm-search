@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/igar1991/swarm-search/compare/v1.3.0...v1.4.0) (2023-02-05)
+
+
+### Features
+
+* d.ts added ([69204cd](https://github.com/igar1991/swarm-search/commit/69204cd6556cc59f67f1e6b97c65a9ef115428ad))
+
 ## [1.3.0](https://github.com/igar1991/swarm-search/compare/v1.2.0...v1.3.0) (2023-02-05)
 
 
