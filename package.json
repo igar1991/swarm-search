@@ -1,6 +1,6 @@
 {
   "name": "@bzzwiki/wiki-search",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Swarm Search is a mechanism for instant search in an array of decentralized data.",
   "main": "dist/index.min.js",
   "types": "dist/src/index.d.ts",
