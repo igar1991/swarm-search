@@ -1,7 +1,9 @@
 import { checkConfig, fillConfig, printConfig, uploadDbFile } from './utils'
 import { DBInformation } from '../shared/db/interfaces'
+import dotenv from 'dotenv'
 
 export async function startUploader() {
+  dotenv.config()
   const config = fillConfig()
   const dbInfo: DBInformation = {
     v: 1,

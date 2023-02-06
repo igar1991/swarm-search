@@ -21,6 +21,7 @@ export interface ScanFilesProcessData {
 }
 
 export interface ScanLinesOptions {
+  batch: number
   filePath: string
   startPosition: number
   onProcess: (data: ScanLinesProcessData) => void
@@ -28,7 +29,7 @@ export interface ScanLinesOptions {
 
 export interface ScanLinesProcessData {
   logMessage: string
-  line: string
+  lines: string[]
 }
 
 /**
@@ -109,10 +110,10 @@ export function getAppConfig(): AppConfig {
     searchPath: process.env[EXPLANATION.searchPath] ?? './data',
     linesFilePath: process.env[EXPLANATION.linesFilePath] ?? '',
     outputDbPath: process.env[EXPLANATION.outputDbPath] ?? './INDEXED_OUTPUT.db',
-    overrideDb: Boolean(process.env[EXPLANATION.overrideDb]),
+    overrideDb: process.env[EXPLANATION.overrideDb] === 'true',
     startPosition: Number(process.env[EXPLANATION.startPosition] ?? 0),
-    searchType: process.env[EXPLANATION.searchType] ?? 'wiki_titles',
-    muteProcessLogs: Boolean(process.env[EXPLANATION.muteProcessLogs]) ?? false,
+    searchType: process.env[EXPLANATION.searchType] ?? SEARCH_WIKI_TITLES,
+    muteProcessLogs: process.env[EXPLANATION.muteProcessLogs] === 'true',
   }
 }
 
@@ -183,21 +184,35 @@ export async function scanFiles(options: ScanFilesOptions): Promise<void> {
 export async function scanWikiTitlesFile(options: ScanLinesOptions): Promise<void> {
   return new Promise((resolve, reject) => {
     const reader = new LineByLineReader(options.filePath)
+    const batch: string[] = []
 
     let lines = 0
     reader.on('line', async line => {
       if (line !== 'page_title') {
         reader.pause()
-        await options.onProcess({
-          logMessage: `Processing line by index ${lines}`,
-          line,
-        })
+        batch.push(line)
+
+        if (batch.length >= options.batch) {
+          await options.onProcess({
+            logMessage: `Processing lines on index ${lines}`,
+            lines: batch,
+          })
+          batch.length = 0
+        }
+
         reader.resume()
       }
 
       lines++
     })
     reader.on('error', reject)
-    reader.on('end', resolve)
+    reader.on('end', async () => {
+      await options.onProcess({
+        logMessage: `Processing lines on index ${lines}`,
+        lines: batch,
+      })
+      batch.length = 0
+      resolve()
+    })
   })
 }
