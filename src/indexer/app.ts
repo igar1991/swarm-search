@@ -13,6 +13,7 @@ import {
 } from './utils'
 import { printConfig } from '../shared/utils/config'
 import { createFullPath, getParentPath, isParentPathExists } from '../../test/utils/db'
+import dotenv from 'dotenv'
 
 function processLog(text: string, isMute: boolean): void {
   if (!isMute) {
@@ -22,6 +23,7 @@ function processLog(text: string, isMute: boolean): void {
 }
 
 export async function startIndexer() {
+  dotenv.config()
   const config = getAppConfig()
   printConfig(config, explainConfig)
   checkConfig(config)
@@ -42,7 +44,9 @@ export async function startIndexer() {
   }
 
   const onLineProcess = async (data: ScanLinesProcessData) => {
-    await run('INSERT INTO items (name, text) VALUES (?, ?)', [data.line, ''])
+    const valuesTemplate = data.lines.map(() => '(?, ?)').join(',')
+    const value = data.lines.map(item => [item, '']).flat()
+    await run(`INSERT INTO items (name, text) VALUES ${valuesTemplate}`, value)
     // eslint-disable-next-line no-console
     processLog(data.logMessage, config.muteProcessLogs)
   }
@@ -56,6 +60,7 @@ export async function startIndexer() {
     })
   } else if (config.searchType === SEARCH_WIKI_TITLES) {
     await scanWikiTitlesFile({
+      batch: 1000,
       filePath: config.linesFilePath,
       startPosition: config.startPosition,
       onProcess: onLineProcess,

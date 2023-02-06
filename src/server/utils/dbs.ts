@@ -61,7 +61,7 @@ function loadDb(dbsPath: string, id: string): void {
 export function isDbInstanceAvailable(id: string): boolean {
   assertSwarmReference(id)
 
-  return Boolean(dbs[id] ?? false)
+  return Boolean(dbs[id])
 }
 
 export function assertDbUsingAllowed(config: ServerConfig, id: string): asserts config is ServerConfig {
