@@ -10,6 +10,7 @@
     "start-downloader": "ts-node src/downloader/index.ts",
     "start-indexer": "ts-node src/indexer/index.ts",
     "start-uploader": "ts-node src/uploader/index.ts",
+    "start-deployer": "ts-node src/deployer/index.ts",
     "test": "jest",
     "lint:check": "eslint \"src/**/*.ts\" \"test/**/*.ts\" && prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "check:types": "tsc --project tsconfig.test.json",

@@ -1,3 +1,8 @@
 import allDownloaderApps from './all-downloader-apps'
 
-allDownloaderApps()
+const data = allDownloaderApps()
+
+process.on('SIGINT', () => {
+  data.stopManager()
+  data.appInstance.close()
+})

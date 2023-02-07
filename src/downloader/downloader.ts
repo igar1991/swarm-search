@@ -135,10 +135,6 @@ async function processTask(task: QueueTask): Promise<void> {
  * Start manager which check queue and process items
  */
 export async function startDownloaderManager(config: ManagerConfig): Promise<void> {
-  process.on('SIGINT', () => {
-    stopManager()
-  })
-
   activeTask = null
   managerConfig = config
   // eslint-disable-next-line no-constant-condition
