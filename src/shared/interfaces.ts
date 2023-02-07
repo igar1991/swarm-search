@@ -72,10 +72,6 @@ export interface PublicServerInformation {
   allowedSearchTypes: { type: string; title: string }[]
 }
 
-export interface UploaderConfig {
-  privateKey: string
-}
-
 /**
  * Types of search
  */

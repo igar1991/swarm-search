@@ -2,29 +2,61 @@
 
 Swarm Search is a mechanism for instant search in an array of decentralized data.
 
--Can be used with gateways/locally
+The solution is Layer-2 working on top of Ethereum Swarm. With it, you can create a SQLite database, share it and use it.
+
+The database can be used, for example, for instant suggestions for available pages on decentralized projects like [BzzWiki](https://github.com/igar1991/swarm-wiki) or your own project.
+
+## Backend components
+
+The backend for the databases can be a gateway or your local machine. To run the database locally, configure and run `downloader` and `server`. and specify your address as API url. 
+
+**Remember** that on pages running under https, you need to specify the API url with https.
 
 ## Front-end library
 
-## Indexer
+Library for accessing the server API from a client side.
 
-## Uploader
+[README.md](https://github.com/igar1991/swarm-search/tree/master/src/client/README.md)
+
+## Server
+
+The server is designed to process requests from end users.
+
+[README.md](https://github.com/igar1991/swarm-search/tree/master/src/server/README.md)
 
 ## Downloader
 
-Downloader is an internal web server that accepts requests to download databases from Swarm. 
+Downloader is an internal web server that accepts requests to download databases from Ethereum Swarm.
 
-The database consists of meta-information about the database and about each of its parts. 
+[README.md](https://github.com/igar1991/swarm-search/tree/master/src/downloader/README.md)
 
-The whole database is divided into pieces and a sha256 hash is created for each piece. 
+## Indexer
 
-This approach allows you:
-* Control the integrity of the database during the download
-* Store tens and hundreds of GB of databases in Swarm
+Indexer is needed to create a SQLite database from a data.
 
-## --Suggestions
+[README.md](https://github.com/igar1991/swarm-search/tree/master/src/indexer/README.md)
 
-Create SQLite DB for titles only using `src/indexer/README.md` instruction.
+## Uploader
+
+Uploader is required to upload the finished database to Ethereum Swarm.
+
+[README.md](https://github.com/igar1991/swarm-search/tree/master/src/uploader/README.md)
+
+## Deployer
+
+Deployer is designed to send a request to the gateway to download the database with tracking when the database is downloaded.
+
+[README.md](https://github.com/igar1991/swarm-search/tree/master/src/deployer/README.md)
+
+## How to create and start a decentralized DB?
+
+1) Get the list of titles of your content
+2) Run `indexer` for creating a SQLite DB from the titles
+3) Run `uploader` for uploading SQLite DB to Ethereum Swarm. Get DB ID from the output
+4) Configure your `server` with the DB ID. Start `server`
+5) Start `downloader`
+6) Run `deployer` and wait syncing the DB data
+7) Start using front-end library to make queries to the DB
 
 ## Testing
 
