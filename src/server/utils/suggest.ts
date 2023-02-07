@@ -12,6 +12,8 @@ export const RESULT_MAX_LIMIT = 50
 const likeQuery =
   'SELECT * FROM items WHERE name LIKE ? COLLATE NOCASE OR name LIKE ? COLLATE NOCASE OR name LIKE ? COLLATE NOCASE LIMIT ?;'
 
+const cache: { [key: string]: any[] } = {}
+
 export function replaceAll(text: string, from: string, to: string): string {
   return text.split(from).join(to)
 }
@@ -29,17 +31,24 @@ export async function suggest(dbId: string, query: string, limit = 10): Promise<
   }
 
   const db = getDb(getServerConfig(), dbId)
-  const { all } = getDbHelper(db)
-  const query1 = query + '%'
-  const query2 = replaceAll(query, ' ', '_') + '%'
-  const query3 = replaceAll(query, ' ', '-') + '%'
-  const resultResponse = (await all(likeQuery, [query1, query2, query3, limit.toString()])) as DBSuggestResponse[]
-  const result = resultResponse.map(item => ({
-    page: {
-      relativeUrl: item.name,
-      preview: item.text,
-    },
-  }))
+  let result
+
+  if (cache[query]) {
+    result = cache[query]
+  } else {
+    const { all } = getDbHelper(db)
+    const query1 = query + '%'
+    const query2 = replaceAll(query, ' ', '_') + '%'
+    const query3 = replaceAll(query, ' ', '-') + '%'
+    const resultResponse = (await all(likeQuery, [query1, query2, query3, limit.toString()])) as DBSuggestResponse[]
+    result = resultResponse.map(item => ({
+      page: {
+        relativeUrl: item.name,
+        preview: item.text,
+      },
+    }))
+    cache[query] = result
+  }
 
   return {
     id: dbId,
