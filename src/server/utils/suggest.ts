@@ -9,8 +9,7 @@ export const QUERY_MAX_LENGTH = 20
 export const RESULT_MIN_LIMIT = 1
 export const RESULT_MAX_LIMIT = 50
 
-const likeQuery =
-  "SELECT * FROM items WHERE name LIKE replace(?, ' ', '_') COLLATE NOCASE OR LIKE replace(?, ' ', '-') COLLATE NOCASE OR LIKE ? COLLATE NOCASE LIMIT ?;"
+const likeQuery = 'SELECT * FROM items WHERE name LIKE ? OR LIKE ? OR LIKE ? COLLATE NOCASE LIMIT ?;'
 
 /**
  * Ask DB about suggestions
@@ -26,7 +25,10 @@ export async function suggest(dbId: string, query: string, limit = 10): Promise<
 
   const db = getDb(getServerConfig(), dbId)
   const { all } = getDbHelper(db)
-  const resultResponse = (await all(likeQuery, [query + '%', limit.toString()])) as DBSuggestResponse[]
+  const query1 = query + '%'
+  const query2 = query.replace(' ', '_') + '%'
+  const query3 = query.replace(' ', '-') + '%'
+  const resultResponse = (await all(likeQuery, [query1, query2, query3, limit.toString()])) as DBSuggestResponse[]
   const result = resultResponse.map(item => ({
     page: {
       relativeUrl: item.name,
