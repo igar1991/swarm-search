@@ -32,6 +32,7 @@ export enum Variables {
   dbDescription,
   dbFilePath,
   splitBlockSize,
+  startUploadBlock,
 }
 
 export type ConfigValues = {
@@ -66,6 +67,11 @@ export const CONFIG_DESCRIPTION: ConfigDescription = {
       variableName: Variables.splitBlockSize,
       envName: 'SPLIT_BLOCK_SIZE',
       defaultValue: '1000000',
+    },
+    {
+      variableName: Variables.startUploadBlock,
+      envName: 'START_UPLOAD_BLOCK',
+      defaultValue: '1',
     },
   ],
 }
@@ -126,6 +132,7 @@ export function fillConfig(): ConfigValues {
     dbDescription: '',
     dbFilePath: '',
     splitBlockSize: '',
+    startUploadBlock: '',
   }
   for (const item of CONFIG_DESCRIPTION.items) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -177,6 +184,12 @@ export function checkConfig(config: ConfigValues): void {
   if (!config.beeStamp) {
     throw new Error('Bee stamp should be defined')
   }
+
+  const startUploadBlock = Number(config.startUploadBlock)
+
+  if (startUploadBlock < 1) {
+    throw new Error('Start upload block should start from 1')
+  }
 }
 
 /**
@@ -189,16 +202,23 @@ export async function uploadDbFile(
 ): Promise<UploadDbFileInfo> {
   const bee = new Bee(configValues.beeUrl)
   const blockSize = Number(configValues.splitBlockSize)
+  const startUploadBlock = Number(configValues.startUploadBlock)
 
   if (blockSize <= 0) {
     throw new Error('Incorrect block size. It should be positive')
   }
+
   const fileSize = fs.statSync(configValues.dbFilePath).size
   const blocksCount = Math.ceil(fileSize / blockSize)
+
+  if (startUploadBlock < 1 || startUploadBlock > blocksCount) {
+    throw new Error(`Start upload block should be from 1 to ${blocksCount}`)
+  }
+
   const blocks: DBBlock[] = []
   const fileOpen = fs.openSync(configValues.dbFilePath, 'r')
 
-  for (let i = 0; i < blocksCount; i++) {
+  for (let i = startUploadBlock - 1; i < blocksCount; i++) {
     const offset = i * blockSize
     const sizeToRead = Math.min(fileSize - offset, blockSize)
     const buffer = Buffer.alloc(sizeToRead)
