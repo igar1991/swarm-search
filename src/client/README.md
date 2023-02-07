@@ -2,6 +2,21 @@
 
 Library for accessing the server API from a client side.
 
+Installation
+
+```
+npm i @bzzwiki/wiki-search
+```
+
+Using
+
+```js
+import {SearchClient} from '@bzzwiki/wiki-search';
+
+const searchClient = new SearchClient('http://localhost:7890/v1');
+```
+
+
 # Integration with a UI
 
 Example of integration with a UI: https://github.com/igar1991/swarm-wiki/tree/master/frontend/wiki/src/Suggest
