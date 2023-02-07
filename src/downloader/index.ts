@@ -5,4 +5,5 @@ const data = allDownloaderApps()
 process.on('SIGINT', () => {
   data.stopManager()
   data.appInstance.close()
+  process.exit()
 })
