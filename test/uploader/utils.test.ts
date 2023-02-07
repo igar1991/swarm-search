@@ -1,4 +1,4 @@
-import { fillConfig, uploadDbFile } from '../../src/uploader/utils'
+import { ConfigValues, fillConfig, uploadDbFile } from '../../src/uploader/utils'
 import { join } from 'path'
 import { BatchId, Bee, UploadOptions, UploadResult } from '@ethersphere/bee-js'
 
@@ -15,13 +15,14 @@ describe('uploader utils', () => {
       description: dbDescription,
       blocks: [],
     }
-    const configValues = {
+    const configValues: ConfigValues = {
       beeUrl: 'http://localhost:1633',
       beeStamp: '',
       dbName: '',
       dbDescription: '',
       dbFilePath: filePath,
       splitBlockSize: '5',
+      startUploadBlock: '1',
     }
     Bee.prototype.uploadData = async (
       postageBatchId: string | BatchId,
