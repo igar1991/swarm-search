@@ -9,7 +9,8 @@ export const QUERY_MAX_LENGTH = 20
 export const RESULT_MIN_LIMIT = 1
 export const RESULT_MAX_LIMIT = 50
 
-const likeQuery = 'SELECT * FROM items WHERE name LIKE ? COLLATE NOCASE LIMIT ?;'
+const likeQuery =
+  "SELECT * FROM items WHERE name LIKE replace(?, ' ', '_') COLLATE NOCASE OR LIKE replace(?, ' ', '-') COLLATE NOCASE OR LIKE ? COLLATE NOCASE LIMIT ?;"
 
 /**
  * Ask DB about suggestions

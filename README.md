@@ -58,6 +58,14 @@ Deployer is designed to send a request to the gateway to download the database w
 6) Run `deployer` and wait syncing the DB data
 7) Start using front-end library to make queries to the DB
 
+If you want to run `server` and `downloader` as daemons, you can use `pm2`:
+
+`npm install pm2 -g`
+
+`pm2 start "cd /root/swarm-search && npm run start-downloader"`
+
+`pm2 start "cd /root/swarm-search && npm run start-server"`
+
 ## Testing
 
 ```
@@ -69,7 +77,3 @@ npm run test
 ### Full-text search
 
 The project has the ability to use requests other than suggestion. For example, it is possible to implement full-text search in a project. To do this, for example, use elasticsearch bulk insert format data from https://dumps.wikimedia.org/other/
-
-### Proof of DB author
-
-To confirm each new version of the database, it may be necessary to be able to verify the author of the database. A field with the address of the author and his signature can be embedded in the database metadata.
