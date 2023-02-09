@@ -65,7 +65,7 @@ Example of such JSON file.
 
 `UPLOADER_DB_NAME` - title in the metadata
 
-`UPLOADER_DB_DESCRIPTION` - description on the metadata
+`UPLOADER_DB_DESCRIPTION` - description in the metadata
 
 `UPLOADER_DB_FILE_PATH` - file path that should be uploaded to the network
 

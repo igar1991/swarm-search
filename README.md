@@ -6,6 +6,8 @@ The solution is Layer-2 working on top of Ethereum Swarm. With it, you can creat
 
 The database can be used, for example, for instant suggestions for available pages on decentralized projects like [BzzWiki](https://github.com/igar1991/swarm-wiki) or your own project.
 
+[![Suggestions DEMO"](https://i.ytimg.com/vi/tpktKqwaN3w/maxresdefault.jpg)](https://www.youtube.com/watch?v=tpktKqwaN3w)
+
 ## Backend components
 
 The backend for the databases can be a gateway or your local machine. To run the database locally, configure and run `downloader` and `server`. and specify your address as API url. 
@@ -50,6 +52,7 @@ Deployer is designed to send a request to the gateway to download the database w
 
 ## How to create and start a decentralized DB?
 
+0) Copy `example.env` to `.env`. Fill in the required fields 
 1) Get the list of titles of your content
 2) Run `indexer` for creating a SQLite DB from the titles
 3) Run `uploader` for uploading SQLite DB to Ethereum Swarm. Get DB ID from the output
